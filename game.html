@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Angličtina hrou – Mini kvíz</title>
+  <style>
+    body { font-family: 'Comic Sans MS', cursive, sans-serif; background: #e6fbff; text-align: center; }
+    #quiz { max-width: 420px; margin: 40px auto; background: #fff; border-radius: 16px; padding: 2em; box-shadow: 0 2px 16px #c0dee4; }
+    .option { display: block; margin: 10px 0; background: #91d5ff; border: none; border-radius: 14px; padding: 12px; font-size: 1.2em; cursor: pointer; }
+    .option.correct { background: #93e39e; }
+    .option.wrong { background: #f3a6a6; }
+    #score { font-size: 1.2em; margin-top: 20px; }
+    .cta { margin-top: 28px; }
+  </style>
+</head>
+<body>
+  <h1>Procvičuj angličtinu!</h1>
+  <div id="quiz"></div>
+  <div class="cta">
+    <button onclick="restart()">Zkusit znova</button>
+  </div>
+  <script>
+    const questions = [
+      {
+        q: "Jak se řekne anglicky 'kočka'?",
+        options: ["dog", "cat", "bird", "fish"],
+        answer: 1
+      },
+      {
+        q: "Jak se řekne 'dům'?",
+        options: ["house", "school", "car", "tree"],
+        answer: 0
+      },
+      {
+        q: "Jaké je číslo 'devět'?",
+        options: ["four", "seven", "nine", "six"],
+        answer: 2
+      },
+      {
+        q: "Jak se anglicky řekne 'modrý'?",
+        options: ["blue", "red", "yellow", "green"],
+        answer: 0
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[current];
+      let html = `<h2>${q.q}</h2>`;
+      q.options.forEach((opt, i) => {
+        html += `<button class="option" onclick="answer(${i})">${opt}</button>`;
+      });
+      document.getElementById('quiz').innerHTML = html + `<div id="score">Body: ${score}</div>`;
+    }
+
+    function answer(i) {
+      const q = questions[current];
+      const opts = document.querySelectorAll('.option');
+      if (i == q.answer) {
+        opts[i].classList.add('correct');
+        score++;
+      } else {
+        opts[i].classList.add('wrong');
+        opts[q.answer].classList.add('correct');
+      }
+      opts.forEach(btn => btn.disabled = true);
+      setTimeout(() => {
+        current++;
+        if (current < questions.length) {
+          showQuestion();
+        } else {
+          document.getElementById('quiz').innerHTML = `<h2>Hotovo!</h2><div id="score">Tvé skóre: ${score} / ${questions.length}</div>`;
+        }
+      }, 900);
+    }
+
+    function restart() {
+      current = 0;
+      score = 0;
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
